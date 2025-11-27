@@ -25,7 +25,6 @@ public class SessionService {
     public void createSession(HttpServletRequest request, String username, Long userId) {
         HttpSession session = request.getSession(true);
 
-        // 세션에 사용자 정보 저장
         session.setAttribute("username", username);
         session.setAttribute("userId", userId);
         session.setAttribute("loginTime", LocalDateTime.now().toString());
@@ -33,15 +32,15 @@ public class SessionService {
         session.setAttribute("ipAddress", getClientIP(request));
 
         // Redis에 추가 메타데이터 저장
-        String sessionKey = SESSION_PREFIX + session.getId();
-        Map<String, Object> sessionData = new HashMap<>();
-        sessionData.put("username", username);
-        sessionData.put("userId", userId);
-        sessionData.put("loginTime", LocalDateTime.now().toString());
-        sessionData.put("lastAccessTime", LocalDateTime.now().toString());
-
-        redisTemplate.opsForHash().putAll(sessionKey, sessionData);
-        redisTemplate.expire(sessionKey, 30, TimeUnit.MINUTES);
+//        String sessionKey = SESSION_PREFIX + session.getId();
+//        Map<String, Object> sessionData = new HashMap<>();
+//        sessionData.put("username", username);
+//        sessionData.put("userId", userId.toString());  // ← Long을 String으로 변환!
+//        sessionData.put("loginTime", LocalDateTime.now().toString());
+//        sessionData.put("lastAccessTime", LocalDateTime.now().toString());
+//
+//        redisTemplate.opsForHash().putAll(sessionKey, sessionData);
+//        redisTemplate.expire(sessionKey, 30, TimeUnit.MINUTES);
 
         log.info("Session created for user: {} with session ID: {}", username, session.getId());
     }

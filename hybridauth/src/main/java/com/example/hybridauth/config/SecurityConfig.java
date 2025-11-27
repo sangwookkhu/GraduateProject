@@ -44,7 +44,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         // 인증 불필요 엔드포인트
-                        .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
+                        .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/logout").permitAll()  // ← logout 추가!
 
                         // Session 기반 인증 엔드포인트 (초기 로그인)
                         .requestMatchers("/api/auth/session/**").authenticated()

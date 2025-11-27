@@ -34,6 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String jwt = extractJwtFromRequest(request);
 
+            // JWT가 있을 때만 검증 (빈 문자열이나 null이면 스킵)
             if (StringUtils.hasText(jwt) && jwtService.validateToken(jwt)) {
                 String username = jwtService.getUsernameFromToken(jwt);
 
@@ -50,6 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         } catch (Exception e) {
             log.error("Cannot set user authentication: {}", e.getMessage());
+            // 에러가 나도 계속 진행 (Session 인증으로 fallback)
         }
 
         filterChain.doFilter(request, response);
@@ -62,6 +64,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return bearerToken.substring(7);
         }
 
-        return null;
+        return null;  // Authorization 헤더가 없거나 Bearer가 아니면 null 반환
     }
 }
